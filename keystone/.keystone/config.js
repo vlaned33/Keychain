@@ -186,14 +186,14 @@ import_dotenv2.default.config();
 var keystone_default = withAuth(
   (0, import_core2.config)({
     db: {
-      // we're using sqlite for the fastest startup experience
-      //   for more information on what database might be appropriate for you
-      //   see https://keystonejs.com/docs/guides/choosing-a-database#title
       provider: "sqlite",
-      url: "file:./keystone.db"
+      url: process.env.DATABASE_URL
     },
     lists,
-    session
+    session,
+    server: {
+      cors: true
+    }
   })
 );
 //# sourceMappingURL=config.js.map
