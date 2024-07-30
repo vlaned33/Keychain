@@ -6,6 +6,9 @@ export const REGISTER_MUTATION = gql`
       id
       name
       email
+      password {
+        isSet
+      }
     }
   }
 `;
@@ -18,6 +21,26 @@ export const LOGIN_MUTATION = gql`
       }
       ... on UserAuthenticationWithPasswordFailure {
         message
+      }
+    }
+  }
+`;
+
+export const DELETE_MUTATION = gql`
+  mutation DeletePost($where: PostWhereUniqueInput!) {
+    deletePost(where: $where) {
+      id
+      title
+      content {
+        document
+      }
+      author {
+        id
+        name
+      }
+      tags {
+        id
+        name
       }
     }
   }

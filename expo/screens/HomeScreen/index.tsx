@@ -10,10 +10,13 @@ import {
 import Toast from 'react-native-toast-message';
 import PostItem from './components/PostItem';
 import PostModal from './components/PostModal';
-import { Post, Tag } from '../../src/types/post.types';
+import { Post } from '../../src/types/post.types';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation, CommonActions } from '@react-navigation/native';
 
 const HomeScreen: React.FC = () => {
   const { data, loading, error, refetch } = useQuery(GET_POSTS);
+  const navigation = useNavigation();
 
   const [createPost] = useMutation(CREATE_POST, {
     onCompleted: () => {
@@ -61,32 +64,68 @@ const HomeScreen: React.FC = () => {
   };
 
   const handleDeletePost = (id: string) => {
-    deletePost({ variables: { id } });
+    deletePost({ variables: { where: { id } } })
+      .then(() => {
+        Toast.show({ type: 'success', text1: 'Post Deleted' });
+        refetch();
+      })
+      .catch((error) => {
+        Toast.show({ type: 'error', text1: 'Error', text2: error.message });
+      });
   };
 
   const handleSavePost = async (
     title: string,
     content: string,
-    author: string,
-    tags: Tag[]
+    authorName: string,
+    authorId: string
   ) => {
+    const contentDocument = [
+      {
+        type: 'paragraph',
+        children: [{ text: content }],
+      },
+    ];
+
     if (currentPost) {
-      await updatePost();
+      await updatePost({
+        variables: {
+          where: { id: currentPost.id },
+          data: {
+            title,
+            content: contentDocument,
+            author: { connect: { id: authorId, name: authorName } },
+          },
+        },
+      });
     } else {
       await createPost({
         variables: {
           data: {
             title,
-            content: { document: content },
-            author: { connect: { id: author } },
-            tags: { connect: tags.map((tag) => ({ id: tag.id })) },
+            content: contentDocument,
+            author: { connect: { id: authorId } },
           },
         },
       });
-      Toast.show({ type: 'success', text1: 'Post Created' });
     }
+
     refetch();
     setModalVisible(false);
+  };
+
+  const handleLogout = async () => {
+    try {
+      await AsyncStorage.removeItem('sessionToken');
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: 'Login' }],
+        })
+      );
+    } catch (error) {
+      console.error('Error logging out:', error);
+    }
   };
 
   if (loading) return <Text>Loading...</Text>;
@@ -113,6 +152,9 @@ const HomeScreen: React.FC = () => {
         onSave={handleSavePost}
         post={currentPost}
       />
+      <View style={styles.btn}>
+        <Button title='Logout' onPress={handleLogout} />
+      </View>
     </View>
   );
 };
@@ -127,6 +169,10 @@ const styles = StyleSheet.create({
     fontSize: 24,
     marginBottom: 20,
     textAlign: 'center',
+  },
+
+  btn: {
+    paddingTop: 20,
   },
 });
 

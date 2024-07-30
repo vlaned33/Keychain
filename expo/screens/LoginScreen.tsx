@@ -1,5 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  Button,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
 import { useMutation } from '@apollo/client';
 import { LOGIN_MUTATION } from '../src/api/mutations/logInApi';
 import Toast from 'react-native-toast-message';
@@ -83,6 +90,9 @@ const LoginScreen = () => {
       />
       <Button title='Login' onPress={handleLogin} disabled={loading} />
       {error && <Text style={styles.errorText}>Error: {error.message}</Text>}
+      <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+        <Text style={styles.link}>Already have an account? Register</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -110,6 +120,11 @@ const styles = StyleSheet.create({
     color: 'red',
     textAlign: 'center',
     marginTop: 10,
+  },
+  link: {
+    marginTop: 15,
+    textAlign: 'center',
+    color: 'blue',
   },
 });
 

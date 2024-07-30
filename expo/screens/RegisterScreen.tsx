@@ -12,6 +12,8 @@ import { RootStackParamList } from '../src/types/rootStackParamList.type';
 import { useMutation } from '@apollo/client';
 import { REGISTER_MUTATION } from '../src/api/mutations/logInApi';
 import Toast from 'react-native-toast-message';
+import { validateEmail } from '../src/utils/validateEmail';
+import { validatePassword } from '../src/utils/validatePassword';
 
 const RegisterScreen: React.FC = () => {
   const [name, setName] = useState<string>('');
@@ -26,7 +28,7 @@ const RegisterScreen: React.FC = () => {
       Toast.show({
         type: 'success',
         text1: 'Registration Successful',
-        text2: `Welcome, ${data.register.user.name}`,
+        text2: `Welcome, ${data.createUser.name}`,
       });
       navigation.navigate('Home');
     },
@@ -40,6 +42,24 @@ const RegisterScreen: React.FC = () => {
   });
 
   const submitHandler = async () => {
+    if (!validateEmail(email)) {
+      Toast.show({
+        type: 'error',
+        text1: 'Email Error',
+        text2: 'Please enter a valid email address.',
+      });
+      return;
+    }
+
+    if (!validatePassword(password)) {
+      Toast.show({
+        type: 'error',
+        text1: 'Password Error',
+        text2: 'Password must be at least 8 characters long.',
+      });
+      return;
+    }
+
     if (password !== confirmPassword) {
       Toast.show({
         type: 'error',
@@ -53,7 +73,9 @@ const RegisterScreen: React.FC = () => {
       await register({
         variables: { name, email, password },
       });
-    } catch (err) {}
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (

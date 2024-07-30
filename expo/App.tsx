@@ -28,7 +28,13 @@ const App = () => {
       <NavigationContainer linking={linking}>
         <Stack.Navigator initialRouteName='Register'>
           <Stack.Screen name='Register' component={RegisterScreen} />
-          <Stack.Screen name='Login' component={LoginScreen} />
+          <Stack.Screen
+            options={{
+              headerLeft: () => null,
+            }}
+            name='Login'
+            component={LoginScreen}
+          />
           <Stack.Screen name='Home'>
             {() => (
               <PrivateRoute>
