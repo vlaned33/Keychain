@@ -5,15 +5,15 @@ import {
   TextInput,
   Button,
   TouchableOpacity,
-  StyleSheet,
 } from 'react-native';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
-import { RootStackParamList } from '../src/types/rootStackParamList.type';
+import { RootStackParamList } from '../../src/types/rootStackParamList.type';
 import { useMutation } from '@apollo/client';
-import { REGISTER_MUTATION } from '../src/api/mutations/logInApi';
+import { REGISTER_MUTATION } from '../../src/api/mutations/logInApi';
 import Toast from 'react-native-toast-message';
-import { validateEmail } from '../src/utils/validateEmail';
-import { validatePassword } from '../src/utils/validatePassword';
+import { validateEmail } from '../../src/utils/validateEmail';
+import { validatePassword } from '../../src/utils/validatePassword';
+import { styles } from './RegisterScreen.styles';
 
 const RegisterScreen: React.FC = () => {
   const [name, setName] = useState<string>('');
@@ -115,30 +115,5 @@ const RegisterScreen: React.FC = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    padding: 20,
-  },
-  title: {
-    fontSize: 24,
-    marginBottom: 20,
-    textAlign: 'center',
-  },
-  input: {
-    height: 40,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    marginBottom: 15,
-    paddingHorizontal: 10,
-  },
-  link: {
-    marginTop: 15,
-    textAlign: 'center',
-    color: 'blue',
-  },
-});
 
 export default RegisterScreen;

@@ -13,6 +13,7 @@ import PostModal from './components/PostModal';
 import { Post } from '../../src/types/post.types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation, CommonActions } from '@react-navigation/native';
+import { styles } from './HomeScreen.styles';
 
 const HomeScreen: React.FC = () => {
   const { data, loading, error, refetch } = useQuery(GET_POSTS);
@@ -94,7 +95,7 @@ const HomeScreen: React.FC = () => {
           data: {
             title,
             content: contentDocument,
-            author: { connect: { id: authorId} },
+            author: { connect: { id: authorId } },
           },
         },
       });
@@ -158,22 +159,5 @@ const HomeScreen: React.FC = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 24,
-    marginBottom: 20,
-    textAlign: 'center',
-  },
-
-  btn: {
-    paddingTop: 20,
-  },
-});
 
 export default HomeScreen;

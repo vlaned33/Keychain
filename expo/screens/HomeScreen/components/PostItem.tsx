@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
 import { Post } from '../../../src/types/post.types';
+import { styles } from './PostItem.styles';
 
 interface PostItemProps {
   post: Post;
@@ -31,23 +32,5 @@ const PostItem: React.FC<PostItemProps> = ({ post, onEdit, onDelete }) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  postItem: {
-    padding: 10,
-    marginVertical: 5,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
-  },
-  postTitle: {
-    fontWeight: 'bold',
-  },
-  buttonContainer: {
-    marginTop: 10,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-});
 
 export default PostItem;
