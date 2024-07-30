@@ -94,7 +94,7 @@ const HomeScreen: React.FC = () => {
           data: {
             title,
             content: contentDocument,
-            author: { connect: { id: authorId, name: authorName } },
+            author: { connect: { id: authorId} },
           },
         },
       });
